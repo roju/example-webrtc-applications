@@ -60,21 +60,11 @@ func main() {
 	}
 
 	// Create a video track
-	firstVideoTrack, err := webrtc.NewTrackLocalStaticSample(webrtc.RTPCodecCapability{MimeType: "video/vp8"}, "video", "pion2")
+	firstVideoTrack, err := webrtc.NewTrackLocalStaticSample(webrtc.RTPCodecCapability{MimeType: "video/H264"}, "video", "pion2")
 	if err != nil {
 		panic(err)
 	}
 	_, err = peerConnection.AddTrack(firstVideoTrack)
-	if err != nil {
-		panic(err)
-	}
-
-	// Create a second video track
-	secondVideoTrack, err := webrtc.NewTrackLocalStaticSample(webrtc.RTPCodecCapability{MimeType: "video/vp8"}, "video", "pion3")
-	if err != nil {
-		panic(err)
-	}
-	_, err = peerConnection.AddTrack(secondVideoTrack)
 	if err != nil {
 		panic(err)
 	}
@@ -111,7 +101,7 @@ func main() {
 
 	// Start pushing buffers on these tracks
 	pipelineForCodec("opus", []*webrtc.TrackLocalStaticSample{audioTrack}, *audioSrc)
-	pipelineForCodec("vp8", []*webrtc.TrackLocalStaticSample{firstVideoTrack, secondVideoTrack}, *videoSrc)
+	pipelineForCodec("hwh264", []*webrtc.TrackLocalStaticSample{firstVideoTrack}, *videoSrc)
 
 	// Block forever
 	select {}
@@ -121,6 +111,8 @@ func main() {
 func pipelineForCodec(codecName string, tracks []*webrtc.TrackLocalStaticSample, pipelineSrc string) {
 	pipelineStr := "appsink name=appsink"
 	switch codecName {
+	case "hwh264":
+		pipelineStr = pipelineSrc + " ! video/x-h264,stream-format=byte-stream ! " + pipelineStr
 	case "vp8":
 		pipelineStr = pipelineSrc + " ! vp8enc error-resilient=partitions keyframe-max-dist=10 auto-alt-ref=true cpu-used=5 deadline=1 ! " + pipelineStr
 	case "vp9":
