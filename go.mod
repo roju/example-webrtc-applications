@@ -1,4 +1,4 @@
-module github.com/pion/example-webrtc-applications/v3
+module github.com/roju/example-webrtc-applications/v3
 
 go 1.22
 
