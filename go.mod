@@ -55,3 +55,5 @@ require (
 	golang.org/x/sys v0.25.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
+
+replace github.com/pion/example-webrtc-applications => github.com/roju/example-webrtc-applications master
